@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All possible combinations in tris</title>
+    <style>
+        div {
+            display: flex;
+            margin: 5px;
+            border: solid 0px;
+            flex-wrap: wrap;
+            
+        }
+        table {
+            table-layout: fixed;
+            /*border-collapse: collapse;*/
+        }
+        td {
+            text-align: center;
+            height: 20px;
+            width: 20px;
+        }
+        #box {
+            display: flex;
+            flex-direction: column;
+            border: none;
+        }
+        .conters {
+            border: solid;
+        }
+        /*
+        * {
+            margin: 0;
+            border: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }*/
+    </style>
+</head>
+<body>
+    
+    <div id="box" class="conters"></div>
+    <script>
+        const box = document.getElementById('box')
+        //box.style.display = 'flex'
+        const e = document.createElement('div')
+        let matrix = [];
+        const SIZE_MATRIX = 3
+        const SCARTO = 6 //number of cells that it doesn generate
+        let generalCount = 0;
+        const SEE = true
+        
+        for(let i=0;i<SIZE_MATRIX;i++){
+            let sss = []
+            for(let j=0;j<SIZE_MATRIX;j++){
+                sss.push(0)
+            }
+            matrix.push(sss)
+        }
+
+        function addLink(i,j){
+            //also matrix(global)
+        }
+
+        function makeCase(bo){ // no need to pass matrix or id because its global
+            if(SEE){
+                const el = e.cloneNode()
+                el.innerHTML = `<table border='solid 1px'>
+                ${(()=>{
+                    let s = ""
+                    for(let i=0;i<SIZE_MATRIX;i++){
+                        s += `<tr>${(
+                            ()=>{
+                                let s2 = ""
+                                for(let j=0;j<SIZE_MATRIX;j++){
+                                    s2 += `<td style="background-color:${/*matrix[i][j]==0?"black":matrix[i][j]==1?"red":"blue"*/''};"><a href="${addLink(i,j)}">${matrix[i][j]==0?"_":matrix[i][j]==1?"X":"O"}</a></td>`
+                                }
+                                return s2
+                            })()
+                        }</tr>`
+                    }
+                    return s
+                })()}
+                </table>`
+                bo.appendChild(el)
+            }
+            generalCount++
+        }
+        let boxes = []
+        function makeBox(){
+            const b = box.cloneNode()
+            b.id = ''
+            boxes.push(b)
+        }
+        makeBox()
+        makeCase(boxes[0])
+
+        let globox = 0
+        /*
+        function check1(fill){
+            for(let i=0;i<4;i++){
+                if(matrix[i] === 0){
+                    matrix[i] = fill
+                    makeCase(boxes[globox])
+                    matrix[i] = 0
+                }
+            }
+        }
+
+
+        
+        check1(2)
+        globox++
+
+        function check2(fill){
+            for(let j=0;j<4;j++){
+                matrix[j] = 1
+                check1(fill)
+                matrix[j] = 0
+            }
+        }
+        
+        check2(2)
+        globox++
+        
+        
+        for(let k=0;k<4;k++){
+            if(matrix[k]==0){
+                matrix[k] = 1
+                for(let j=0;j<4;j++){
+                    if(matrix[j] == 0){
+                        matrix[j] = 2
+                        for(let i=0;i<4;i++){
+                            if(matrix[i] == 0){
+                                matrix[i] = 3
+                                makeCase(boxes[globox])
+                                matrix[i] = 0
+                            }
+                        }
+                        matrix[j] = 0
+                    }
+                }
+                matrix[k] = 0
+            }
+            
+        }
+        globox++
+        
+        for(let k=0;k<4;k++){
+            if(matrix[k]==0){
+                matrix[k] = 1
+                for(let j=0;j<4;j++){
+                    if(matrix[j] == 0){
+                        matrix[j] = 2
+                        for(let i=0;i<4;i++){
+                            if(matrix[i] == 0){
+                                matrix[i] = 1
+                                for(let z=0;z<4;z++){
+                                    if(matrix[z]==0){
+                                        matrix[z]=2
+                                        makeCase(boxes[globox])
+                                        matrix[z]=0
+                                    }
+                                }
+                                
+                                matrix[i] = 0
+                            }
+                        }
+                        matrix[j] = 0
+                    }
+                }
+                matrix[k] = 0
+            }
+            
+        }*/
+
+        
+
+        function funzaGiusta(n){
+            makeBox()
+            globox++
+            if(n%2==0){
+                funza2(n)
+            } else {
+                funza1(n)
+            }
+        }
+        function funza1(nTimes){
+            for(let i=0;i<SIZE_MATRIX;i++){
+                for(let j=0;j<SIZE_MATRIX;j++){
+                    if(matrix[i][j]==0){
+                        if(nTimes%2==0){
+                            matrix[i][j] = 2
+                        } else {
+                            matrix[i][j] = 1
+                        }
+                        if(nTimes == 1){
+                            makeCase(boxes[globox])
+                        } else {
+                            funza1(nTimes-1)
+                        }
+                        matrix[i][j] = 0
+                    }
+                }
+                
+            }
+        }
+        function funza2(nTimes){
+            for(let i=0;i<SIZE_MATRIX;i++){
+                for(let j=0;j<SIZE_MATRIX;j++){
+                    if(matrix[i][j]==0){
+                        if(nTimes%2==0){
+                            matrix[i][j] = 1
+                        } else {
+                            matrix[i][j] = 2
+                        }
+                        if(nTimes == 1){
+                            makeCase(boxes[globox])
+                        } else {
+                            funza2(nTimes-1)
+                        }
+                        matrix[i][j] = 0
+                    }
+                }
+                
+            }
+        }
+        
+        for(let i=0;i<SIZE_MATRIX**2-SCARTO;i++){
+            funzaGiusta(i+1)
+        }
+
+
+
+
+        
+        for(let i in boxes){
+            box.appendChild(boxes[i])
+            //console.log(box)
+        }
+        //console.log(boxes)
+        console.log(generalCount)
+    </script>
+</body>
+</html>
